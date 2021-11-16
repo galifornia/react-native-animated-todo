@@ -9,6 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import Svg, { Path, Defs, ClipPath, G } from 'react-native-svg'
+import AnimatedStroke from './animated-stroke'
 
 const MARGIN = 10
 const vWidth = 64 + MARGIN
@@ -67,7 +68,16 @@ const AnimatedCheckbox = ({ checked }: Props) => {
         strokeLinecap="round"
         animatedProps={animatedBoxProps}
       />
-      <Path d={checkMarkPath} stroke={checkMarkColor} />
+
+      <AnimatedStroke
+        progress={progress}
+        strokeWidth={10}
+        d={checkMarkPath}
+        stroke={checkMarkColor}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        strokeOpacity={checked || false ? 1 : 0}
+      />
     </Svg>
   )
 }
