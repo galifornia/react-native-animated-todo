@@ -23,13 +23,21 @@ const AnimatedPath = Animated.createAnimatedComponent(Path)
 
 type Props = {
   checked?: boolean
+  boxStroke?: string
+  highlightColor?: string
+  checkmarkColor?: string
+  activeTextColor?: string
+  doneTextColor?: string
 }
 
-const AnimatedCheckbox = ({ checked }: Props) => {
-  const checkMarkColor = '#000000'
-  const highlightColor = '#ff0000'
-  const boxOutlineColor = '#000000'
-
+const AnimatedCheckbox = ({
+  checked,
+  highlightColor = '#ff0000',
+  checkmarkColor = '#000000',
+  activeTextColor,
+  doneTextColor,
+  boxStroke = '#000000',
+}: Props) => {
   const progress = useSharedValue(0)
 
   useEffect(() => {
@@ -44,7 +52,7 @@ const AnimatedCheckbox = ({ checked }: Props) => {
       stroke: interpolateColor(
         Easing.bezier(0.16, 1, 0.3, 1)(progress.value),
         [0, 1],
-        [boxOutlineColor, highlightColor],
+        [boxStroke, highlightColor],
         'RGB'
       ),
       fill: interpolateColor(
@@ -54,7 +62,7 @@ const AnimatedCheckbox = ({ checked }: Props) => {
         'RGB'
       ),
     }),
-    [highlightColor, boxOutlineColor]
+    [highlightColor, boxStroke]
   )
 
   return (
@@ -94,7 +102,7 @@ const AnimatedCheckbox = ({ checked }: Props) => {
           progress={progress}
           strokeWidth={10}
           d={checkMarkPath}
-          stroke={checkMarkColor}
+          stroke={checkmarkColor}
           strokeLinejoin="round"
           strokeLinecap="round"
           strokeOpacity={checked || false ? 1 : 0}
