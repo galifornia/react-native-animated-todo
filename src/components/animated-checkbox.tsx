@@ -26,16 +26,12 @@ type Props = {
   boxStroke?: string
   highlightColor?: string
   checkmarkColor?: string
-  activeTextColor?: string
-  doneTextColor?: string
 }
 
 const AnimatedCheckbox = ({
   checked,
   highlightColor = '#ff0000',
   checkmarkColor = '#000000',
-  activeTextColor,
-  doneTextColor,
   boxStroke = '#000000',
 }: Props) => {
   const progress = useSharedValue(0)
