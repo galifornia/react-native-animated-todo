@@ -2,21 +2,34 @@ import * as React from 'react'
 import {
   Box,
   HStack,
-  Text,
   themeTools,
   useColorModeValue,
   useTheme,
+  Icon,
 } from 'native-base'
 import { Pressable } from 'react-native'
 import AnimatedCheckbox from './animated-checkbox'
 import AnimatedTaskLabel from './animated-task-label'
+import { PanGestureHandlerProps } from 'react-native-gesture-handler'
+import SwipableView from './swipable-view'
+import { Feather } from '@expo/vector-icons'
 
-type Props = {
+interface Props extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   isDone: boolean
   onToggle: () => void
+  onPressLabel?: () => void
+  onRemove?: () => void
+  subject: string
 }
 
-const TaskItem = ({ isDone, onToggle }: Props) => {
+const TaskItem = ({
+  isDone,
+  onToggle,
+  onPressLabel,
+  onRemove,
+  subject,
+  simultaneousHandlers,
+}: Props) => {
   const theme = useTheme()
   const highlightColor = themeTools.getColor(
     theme,
@@ -37,31 +50,48 @@ const TaskItem = ({ isDone, onToggle }: Props) => {
   )
 
   return (
-    <HStack
-      alignItems="center"
-      w="full"
-      px={4}
-      py={2}
-      bg={useColorModeValue('warmGray.50', 'primary.900')}
+    <SwipableView
+      simultaneousHandlers={simultaneousHandlers}
+      onSwipeLeft={onRemove}
+      backView={
+        <Box
+          w="full"
+          h="full"
+          bg="red.500"
+          alignItems="flex-end"
+          justifyContent="center"
+          pr={4}
+        >
+          <Icon color="white" as={<Feather name="trash-2" />} size="sm"></Icon>
+        </Box>
+      }
     >
-      <Box width={30} height={30} mr={2}>
-        <Pressable onPress={onToggle}>
-          <AnimatedCheckbox
-            checked={isDone}
-            highlightColor={highlightColor}
-            checkmarkColor={checkmarkColor}
-            boxStroke={boxStroke}
-          />
-        </Pressable>
-      </Box>
-      <AnimatedTaskLabel
-        textColor={activeTextColor}
-        inactiveTextColor={doneTextColor}
-        strikethrough={isDone}
+      <HStack
+        alignItems="center"
+        w="full"
+        px={4}
+        py={2}
+        bg={useColorModeValue('warmGray.50', 'primary.900')}
       >
-        Task item
-      </AnimatedTaskLabel>
-    </HStack>
+        <Box width={30} height={30} mr={2}>
+          <Pressable onPress={onToggle}>
+            <AnimatedCheckbox
+              checked={isDone}
+              highlightColor={highlightColor}
+              checkmarkColor={checkmarkColor}
+              boxStroke={boxStroke}
+            />
+          </Pressable>
+        </Box>
+        <AnimatedTaskLabel
+          textColor={activeTextColor}
+          inactiveTextColor={doneTextColor}
+          strikethrough={isDone}
+        >
+          {subject}
+        </AnimatedTaskLabel>
+      </HStack>
+    </SwipableView>
   )
 }
 
