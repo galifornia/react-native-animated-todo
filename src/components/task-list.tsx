@@ -1,5 +1,6 @@
+import * as React from 'react'
 import { AnimatePresence, View } from 'moti'
-import { useCallback } from 'react'
+import { useCallback, useRef } from 'react'
 import {
   PanGestureHandlerProps,
   ScrollView,
@@ -103,6 +104,35 @@ interface Props {
   onRemoveItem: (item: TaskItemData) => void
 }
 
-const TaskList = ({}: Props) => {}
+const TaskList = ({
+  data,
+  editingItemId,
+  onToggleItem,
+  onChangeSubject,
+  onPressedLabel,
+  onFinishEditing,
+  onRemoveItem,
+}: Props) => {
+  const refScrollView = useRef(null)
+  return (
+    <StyledScrollView ref={refScrollView} w="full">
+      <AnimatePresence>
+        {data.map((item) => (
+          <AnimatedTaskItem
+            key={item.id}
+            data={item}
+            simultaneousHandlers={refScrollView}
+            isEditing={editingItemId === item.id}
+            onChangeSubject={onChangeSubject}
+            onToggleItem={onToggleItem}
+            onPressedLabel={onPressedLabel}
+            onFinishEditing={onFinishEditing}
+            onRemove={onRemoveItem}
+          />
+        ))}
+      </AnimatePresence>
+    </StyledScrollView>
+  )
+}
 
 export default TaskList

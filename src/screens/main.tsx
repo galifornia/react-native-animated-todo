@@ -1,16 +1,87 @@
 import * as React from 'react'
-import { Center, Box, Text, VStack, useColorModeValue } from 'native-base'
+import {
+  Center,
+  Box,
+  Text,
+  VStack,
+  useColorModeValue,
+  Fab,
+  Icon,
+} from 'native-base'
 import ThemeToggle from '../components/theme-toggle'
 import TaskItem from '../components/task-item'
+import { AntDesign } from '@expo/vector-icons'
+import shortid from 'shortid'
+import TaskList from '../components/task-list'
+
+const initialData = [
+  {
+    id: shortid.generate(),
+    subject: 'Buy milk',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'Buy tickets for movie',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'Publish daily post',
+    done: false,
+  },
+  {
+    id: shortid.generate(),
+    subject: 'Yesterdays post',
+    done: true,
+  },
+]
 
 const Main = () => {
-  const [checked, setChecked] = React.useState(false)
-  const [subject, setSubject] = React.useState('Task Item')
-  const [isEditing, setIsEditing] = React.useState(false)
+  const [data, setData] = React.useState(initialData)
+  const [editingItemId, setEditingItemId] = React.useState<string | null>(null)
 
-  const handlePressCheckbox = React.useCallback(() => {
-    setChecked((prev) => !prev)
+  const handleToggleTaskItem = React.useCallback((item) => {
+    setData((prevData) => {
+      const newData = [...prevData]
+      const idx = prevData.indexOf(item)
+      newData[idx] = {
+        ...item,
+        done: !item.done,
+      }
+
+      return newData
+    })
   }, [])
+
+  const handleChangeTaskItemSubject = React.useCallback((item, newSubject) => {
+    setData((prevData) => {
+      const newData = [...prevData]
+      const idx = prevData.indexOf(item)
+      newData[idx] = {
+        ...item,
+        subject: newSubject,
+      }
+
+      return newData
+    })
+  }, [])
+
+  const handleFinishEditingTaskItem = React.useCallback((item) => {
+    setEditingItemId(null)
+  }, [])
+
+  const handlePressTaskItem = React.useCallback((item) => {
+    setEditingItemId(item.id)
+  }, [])
+
+  const handleRemoveItem = React.useCallback((item) => {
+    setData((prevData) => {
+      const newData = prevData.filter((i) => item !== i)
+      return newData
+    })
+  }, [])
+
   return (
     <Center
       _dark={{ bg: 'blueGray.900' }}
@@ -18,21 +89,30 @@ const Main = () => {
       flex={1}
     >
       <VStack space={5} alignItems="center" w="full">
-        <TaskItem
-          isDone={checked}
-          onToggle={handlePressCheckbox}
-          subject={subject}
-          onChangeSubject={setSubject}
-          isEditing={isEditing}
-          onPressLabel={() => setIsEditing(true)}
-          onFinishEditing={() => setIsEditing(false)}
+        <TaskList
+          data={data}
+          editingItemId={editingItemId}
+          onToggleItem={handleToggleTaskItem}
+          onChangeSubject={handleChangeTaskItemSubject}
+          onFinishEditing={handleFinishEditingTaskItem}
+          onPressedLabel={handlePressTaskItem}
+          onRemoveItem={handleRemoveItem}
         />
-
-        <Box p={10} bg={useColorModeValue('red.500', 'yellow.500')}>
-          <Text>Hola</Text>
-        </Box>
         <ThemeToggle />
       </VStack>
+      <Fab
+        position="absolute"
+        renderInPortal={false}
+        size="sm"
+        icon={<Icon color="white" as={<AntDesign name="plus" />} size="sm" />}
+        colorScheme={useColorModeValue('blue', 'darkBlue')}
+        bg={useColorModeValue('blue.500', 'blue.400')}
+        onPress={() => {
+          const id = shortid.generate()
+          setData([{ id, subject: '', done: false }, ...data])
+          setEditingItemId(id)
+        }}
+      />
     </Center>
   )
 }
