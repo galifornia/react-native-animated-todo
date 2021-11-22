@@ -5,6 +5,9 @@ import TaskItem from '../components/task-item'
 
 const Main = () => {
   const [checked, setChecked] = React.useState(false)
+  const [subject, setSubject] = React.useState('Task Item')
+  const [isEditing, setIsEditing] = React.useState(false)
+
   const handlePressCheckbox = React.useCallback(() => {
     setChecked((prev) => !prev)
   }, [])
@@ -18,7 +21,11 @@ const Main = () => {
         <TaskItem
           isDone={checked}
           onToggle={handlePressCheckbox}
-          subject="Task item"
+          subject={subject}
+          onChangeSubject={setSubject}
+          isEditing={isEditing}
+          onPressLabel={() => setIsEditing(true)}
+          onFinishEditing={() => setIsEditing(false)}
         />
 
         <Box p={10} bg={useColorModeValue('red.500', 'yellow.500')}>
