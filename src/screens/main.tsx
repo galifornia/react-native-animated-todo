@@ -1,15 +1,6 @@
 import * as React from 'react'
-import {
-  Center,
-  Box,
-  Text,
-  VStack,
-  useColorModeValue,
-  Fab,
-  Icon,
-} from 'native-base'
-import ThemeToggle from '../components/theme-toggle'
-import TaskItem from '../components/task-item'
+import { VStack, useColorModeValue, Fab, Icon } from 'native-base'
+
 import { AntDesign } from '@expo/vector-icons'
 import shortid from 'shortid'
 import TaskList from '../components/task-list'
@@ -94,7 +85,15 @@ const Main = () => {
       <Masthead title="What's up" image={require('../assets/masthead.png')}>
         <Navbar />
       </Masthead>
-      <VStack space={5} alignItems="center" w="full">
+      <VStack
+        flex={1}
+        space={1}
+        bg={useColorModeValue('warmGray.50', 'primary.900')}
+        mt="-20px"
+        borderTopLeftRadius="20px"
+        borderTopRightRadius="20px"
+        pt="20px"
+      >
         <TaskList
           data={data}
           editingItemId={editingItemId}
@@ -104,7 +103,6 @@ const Main = () => {
           onPressedLabel={handlePressTaskItem}
           onRemoveItem={handleRemoveItem}
         />
-        <ThemeToggle />
       </VStack>
       <Fab
         position="absolute"
