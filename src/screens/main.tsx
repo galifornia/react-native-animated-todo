@@ -13,6 +13,7 @@ import TaskItem from '../components/task-item'
 import { AntDesign } from '@expo/vector-icons'
 import shortid from 'shortid'
 import TaskList from '../components/task-list'
+import AnimatedColorBox from '../components/animated-color-box'
 
 const initialData = [
   {
@@ -83,9 +84,9 @@ const Main = () => {
   }, [])
 
   return (
-    <Center
-      _dark={{ bg: 'blueGray.900' }}
-      _light={{ bg: 'blueGray.50' }}
+    <AnimatedColorBox
+      bg={useColorModeValue('warmGrey.50', 'primary.900')}
+      w="full"
       flex={1}
     >
       <VStack space={5} alignItems="center" w="full">
@@ -113,7 +114,7 @@ const Main = () => {
           setEditingItemId(id)
         }}
       />
-    </Center>
+    </AnimatedColorBox>
   )
 }
 
