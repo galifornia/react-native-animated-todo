@@ -14,6 +14,8 @@ import { AntDesign } from '@expo/vector-icons'
 import shortid from 'shortid'
 import TaskList from '../components/task-list'
 import AnimatedColorBox from '../components/animated-color-box'
+import Masthead from '../components/masthead'
+import Navbar from '../components/navbar'
 
 const initialData = [
   {
@@ -89,6 +91,9 @@ const Main = () => {
       w="full"
       flex={1}
     >
+      <Masthead title="What's up" image={require('../assets/masthead.png')}>
+        <Navbar />
+      </Masthead>
       <VStack space={5} alignItems="center" w="full">
         <TaskList
           data={data}
