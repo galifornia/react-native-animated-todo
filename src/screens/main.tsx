@@ -89,10 +89,11 @@ const Main = () => {
         flex={1}
         space={1}
         bg={useColorModeValue('warmGray.50', 'primary.900')}
-        mt="-20px"
-        borderTopLeftRadius="20px"
-        borderTopRightRadius="20px"
-        pt="20px"
+        borderTopLeftRadius={20}
+        borderRightRadius={20}
+        mt={-20}
+        pt={30}
+        p={4}
       >
         <TaskList
           data={data}
